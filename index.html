@@ -520,10 +520,15 @@ function searchEvents() {
 
 }
 
-document.querySelectorAll('.category').forEach(function(category) {
+document.querySelectorAll('.category').forEach(category => {
     category.addEventListener('click', function() {
         const name = category.textContent.trim();
-        alert('Раздел «' + name + '» выбран!');
+
+        document.getElementById('события').scrollIntoView({
+            behavior: 'smooth'
+        });
+
+        alert('Вы выбрали раздел «' + name + '»');
     });
 });
 
