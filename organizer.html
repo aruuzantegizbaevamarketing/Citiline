@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CitiLine — Добавить мероприятие</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f6f8fc;
+    color: #172033;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+header h1 {
+    color: #2563eb;
+    margin-bottom: 5px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 35px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #667085;
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d0d5dd;
+    border-radius: 9px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.success {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #ecfdf3;
+    color: #067647;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>CitiLine</h1>
+    <p>Возможности твоего города — в одном месте</p>
+</header>
+
+<div class="container">
+
+<a href="index.html" class="back">← Вернуться на главную</a>
+
+<div class="card">
+
+<h2>Добавить мероприятие</h2>
+
+<p class="subtitle">
+Заполните информацию о мероприятии. После отправки оно будет проверено администратором.
+</p>
+
+<form id="eventForm">
+
+<label>Название мероприятия</label>
+<input type="text" id="title" placeholder="Например: Городской конкурс" required>
+
+<label>Категория</label>
+<select id="category" required>
+<option value="">Выберите категорию</option>
+<option>Образование</option>
+<option>Спорт</option>
+<option>Конкурсы</option>
+<option>Волонтерство</option>
+<option>Творчество</option>
+<option>IT</option>
+</select>
+
+<label>Описание</label>
+<textarea id="description" placeholder="Расскажите о мероприятии..." required></textarea>
+
+<label>Дата</label>
+<input type="date" id="date" required>
+
+<label>Время</label>
+<input type="time" id="time" required>
+
+<label>Место проведения</label>
+<input type="text" id="location" placeholder="Например: Школа №5" required>
+
+<label>Для каких классов?</label>
+<input type="text" id="classes" placeholder="Например: 8–11 классы">
+
+<label>Организатор</label>
+<input type="text" id="organizer" placeholder="Школа или организация" required>
+
+<label>Контакт для связи</label>
+<input type="text" id="contact" placeholder="Телефон, WhatsApp или Instagram">
+
+<button type="submit">Отправить на проверку</button>
+
+<div class="success" id="success">
+    Мероприятие отправлено на проверку!
+</div>
+
+</form>
+
+</div>
+</div>
+
+<script>
+document.getElementById("eventForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const event = {
+        title: document.getElementById("title").value,
+        category: document.getElementById("category").value,
+        description: document.getElementById("description").value,
+        date: document.getElementById("date").value,
+        time: document.getElementById("time").value,
+        location: document.getElementById("location").value,
+        classes: document.getElementById("classes").value,
+        organizer: document.getElementById("organizer").value,
+        contact: document.getElementById("contact").value,
+        status: "На проверке"
+    };
+
+    localStorage.setItem("citiline_event", JSON.stringify(event));
+
+    document.getElementById("success").style.display = "block";
+    document.getElementById("eventForm").reset();
+});
+</script>
+
+</body>
+</html>
