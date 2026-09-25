@@ -524,11 +524,13 @@ document.querySelectorAll('.category').forEach(category => {
     category.addEventListener('click', function() {
         const name = category.textContent.trim();
 
-        document.getElementById('события').scrollIntoView({
+        const eventsSection = document.getElementById('events');
+        eventsSection.scrollIntoView({
             behavior: 'smooth'
         });
 
-        alert('Вы выбрали раздел «' + name + '»');
+        const title = eventsSection.querySelector('.section-title');
+        title.textContent = 'Мероприятия: ' + name;
     });
 });
 
