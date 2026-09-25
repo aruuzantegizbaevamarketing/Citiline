@@ -520,16 +520,18 @@ function searchEvents() {
 
 }
 
-document.querySelectorAll('.category').forEach(category => {
+document.querySelectorAll('.category').forEach(function(category) {
     category.addEventListener('click', function() {
-        const name = category.textContent.trim();
+        const name = category.querySelector('span').textContent;
 
         const eventsSection = document.getElementById('events');
+
         eventsSection.scrollIntoView({
             behavior: 'smooth'
         });
 
         const title = eventsSection.querySelector('.section-title');
+
         title.textContent = 'Мероприятия: ' + name;
     });
 });
