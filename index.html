@@ -537,6 +537,18 @@ document.querySelectorAll('.category').forEach(function(category) {
 });
 
 </script>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://plcsyhtmydprwmqlqxdn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GYx3zRvlafSY8NkxdG2KSg_LQodlrY4";
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+  
 </body>
   </html>
