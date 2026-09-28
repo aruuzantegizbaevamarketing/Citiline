@@ -199,5 +199,53 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
 });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://plcsyhtmydprwmqlqxdn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GYx3zRvlafSY8NkxdG2KSg_LQodlrY4";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+document.getElementById("eventForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const getValue = (id) => {
+        const element = document.getElementById(id);
+        return element ? element.value : "";
+    };
+
+    const { error } = await supabaseClient
+        .from("События")
+        .insert({
+            title: getValue("заголовок"),
+            category: getValue("категория"),
+            description: getValue("описание"),
+            date: getValue("дата"),
+            time: getValue("время"),
+            location: getValue("место"),
+            target_classes: getValue("целевые_классы"),
+            price: getValue("цена"),
+            organization: getValue("организация"),
+            contact: getValue("контакт"),
+            status: "pending"
+        });
+
+    if (error) {
+        alert("Ошибка при сохранении мероприятия: " + error.message);
+        console.error(error);
+        return;
+    }
+
+    alert("Мероприятие отправлено на проверку!");
+    form.reset();
+});
+</script> 
+    
 </body>
 </html>
