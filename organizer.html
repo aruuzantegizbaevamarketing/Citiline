@@ -202,7 +202,7 @@ document.getElementById("eventForm").addEventListener("submit", async function(e
     };
 
     const { error } = await supabaseClient
-        .from("events")
+        .from("Events")
         .insert([event]);
 
     if (error) {
