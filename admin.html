@@ -1,1 +1,149 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модерация — CitiLine</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      color: #172033;
+    }
+    main { max-width: 850px; margin: auto; }
+    h1 { color: #315be8; }
+    .panel, .event {
+      background: white;
+      padding: 18px;
+      margin: 16px 0;
+      border-radius: 14px;
+      border: 1px solid #e1e5ee;
+    }
+    .muted { color: #687386; }
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 14px;
+      margin: 8px 8px 0 0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .approve { background: #218653; }
+    .reject { background: #c43e4b; }
+    .reload { background: #315be8; }
+    a { color: #315be8; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>CitiLine — модерация</h1>
+  <p class="muted">
+    Проверяй заявки организаторов. Публикуй только те мероприятия,
+    которые ты проверила.
+  </p>
+
+  <div class="panel">
+    <h3>Контакт для организаторов</h3>
+    <p>Администратор CitiLine</p>
+    <p>Телефон / WhatsApp: <strong>+996705333551</strong></p>
+    <p class="muted">
+      Не публикуй личный номер, если не хочешь получать сообщения
+      от незнакомых людей.
+    </p>
+  </div>
+
+  <button class="reload" onclick="loadEvents()">Обновить заявки</button>
+  <p id="message" class="muted">Загрузка заявок...</p>
+  <div id="events"></div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://plcsyhtmydprwmqlqxdn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GYx3zRvlafSY8NkxdG2KSg_LQodlrY4";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function loadEvents() {
+  const message = document.getElementById("message");
+  const container = document.getElementById("events");
+  message.textContent = "Загружаю заявки...";
+  container.replaceChildren();
+
+  const { data, error } = await db
+    .from("Events")
+    .select("*")
+    .eq("статус", "В ожидании");
+
+  if (error) {
+    message.textContent = "Не удалось загрузить заявки: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = "Заявок на проверку пока нет.";
+    return;
+  }
+
+  message.textContent = "Заявок на проверку: " + data.length;
+
+  data.forEach(event => {
+    const card = document.createElement("article");
+    card.className = "event";
+
+    const title = document.createElement("h2");
+    title.textContent = event["заголовок"] || "Без названия";
+
+    const description = document.createElement("p");
+    description.textContent = event["описание"] || "Описание не указано";
+
+    const details = document.createElement("p");
+    details.textContent = [
+      event["категория"],
+      event["дата"],
+      event["время"],
+      event["расположение"],
+      event["организатор"]
+    ].filter(Boolean).join(" • ");
+
+    const approve = document.createElement("button");
+    approve.className = "approve";
+    approve.textContent = "Подтвердить";
+    approve.onclick = () => setStatus(event.id, "Подтверждено");
+
+    const reject = document.createElement("button");
+    reject.className = "reject";
+    reject.textContent = "Отклонить";
+    reject.onclick = () => setStatus(event.id, "Отклонено");
+
+    card.append(title, description, details, approve, reject);
+    container.appendChild(card);
+  });
+}
+
+async function setStatus(id, status) {
+  if (!confirm("Изменить статус заявки на «" + status + "»?")) return;
+
+  const { error } = await db
+    .from("Events")
+    .update({ "статус": status })
+    .eq("id", id);
+
+  if (error) {
+    alert("Не удалось изменить статус: " + error.message);
+    return;
+  }
+
+  alert("Статус изменён.");
+  loadEvents();
+}
+
+loadEvents();
+</script>
+</body>
+</html>
+
