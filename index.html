@@ -339,19 +339,7 @@ footer p {
     Ближайшие мероприятия
   </h2>
 
-  <div class="empty-events">
-
-    <div class="icon">📅</div>
-
-    <h3>Пока мероприятий нет</h3>
-
-    <p>
-      Здесь будут появляться новые мероприятия,
-      конкурсы, олимпиады и другие возможности
-      для школьников.
-    </p>
-
-  </div>
+  <div id="events-list"></div>
 
 </section>
 
@@ -563,21 +551,38 @@ const supabase = window.supabase.createClient(
             "sb_publishable_GYx3zRvlafSY8NkxdG2KSg_LQodlrY4"
         );
 
-        const { data, error } = await client
-            .from("Events")
-            .select("*");
+        
 
-        if (error) {
-            console.error("Supabase:", error.message);
-            return;
-        }
+      const { data, error } = await supabase
+  .from("Events")
+  .select("*");
 
-        console.log("Мероприятия загружены:", data);
-    } catch (e) {
-        console.error("Ошибка:", e);
-    }
-})();
-</script>
+if (error) {
+  console.error("Ошибка загрузки мероприятий:", error.message);
+  return;
+}
+
+const container = document.getElementById("events-list");
+
+if (!container) return;
+
+container.innerHTML = "";
+
+data.forEach(event => {
+  const card = document.createElement("div");
+  card.style.cssText =
+    "padding:16px;margin:12px 0;border:1px solid #ddd;border-radius:12px";
+
+  const title = document.createElement("h3");
+  title.textContent = event["заголовок"] || event.title || "Мероприятие";
+
+  const description = document.createElement("p");
+  description.textContent = event["описание"] || event.description || "";
+
+  card.append(title, description);
+  container.appendChild(card);
+});
+      </script>
 
 </body>
   </html>
