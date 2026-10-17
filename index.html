@@ -558,7 +558,8 @@ const supabase = window.supabase.createClient(
   .select("*");
 
 if (error) {
-  console.error("Ошибка загрузки мероприятий:", error.message);
+  console.error("Ошибка загрузки мероприятий:", error.message); 
+  alert("Ошибка Supabase: " + error.message);
   return;
 }
 
