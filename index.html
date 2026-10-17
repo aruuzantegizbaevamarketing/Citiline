@@ -550,5 +550,34 @@ const supabase = window.supabase.createClient(
 );
 </script>
   
+<script>
+(async function () {
+    try {
+        if (!window.supabase || typeof supabase === "undefined") {
+            console.error("Библиотека Supabase не загружена");
+            return;
+        }
+
+        const client = supabase.createClient(
+            "https://plcsyhtmydprwmqlqxdn.supabase.co",
+            "sb_publishable_GYx3zRvlafSY8NkxdG2KSg_LQodlrY4"
+        );
+
+        const { data, error } = await client
+            .from("События")
+            .select("*");
+
+        if (error) {
+            console.error("Supabase:", error.message);
+            return;
+        }
+
+        console.log("Мероприятия загружены:", data);
+    } catch (e) {
+        console.error("Ошибка:", e);
+    }
+})();
+</script>
+
 </body>
   </html>
