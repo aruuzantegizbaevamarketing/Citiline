@@ -557,6 +557,8 @@ const supabase = window.supabase.createClient(
     .from("Events")
     .select("*")
     .eq("status", "approved");
+      console.log("Загруженные мероприятия:", data);
+console.log("Ошибка:", error);
 
 if (error) {
   console.error("Ошибка загрузки мероприятий:", error.message); 
