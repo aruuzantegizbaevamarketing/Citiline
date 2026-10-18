@@ -553,9 +553,10 @@ const supabase = window.supabase.createClient(
 
         
 
-      const { data, error } = await client 
-  .from("Events")
-  .select("*");
+      const { data, error } = await supabase
+    .from("Events")
+    .select("*")
+    .eq("status", "approved");
 
 if (error) {
   console.error("Ошибка загрузки мероприятий:", error.message); 
