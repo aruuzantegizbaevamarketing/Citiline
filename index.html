@@ -578,10 +578,10 @@ data.forEach(event => {
     "padding:16px;margin:12px 0;border:1px solid #ddd;border-radius:12px";
 
   const title = document.createElement("h3");
-  title.textContent = event["заголовок"] || event.title || "Мероприятие";
+title.textContent = event.title || event["заголовок"] || "Без названия";
 
-  const description = document.createElement("p");
-  description.textContent = event["описание"] || event.description || "";
+const description = document.createElement("p");
+description.textContent = event.description || event["описание"] || "";
 
   card.append(title, description);
   container.appendChild(card);
